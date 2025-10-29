@@ -1,1 +1,8 @@
-olajijij
+CREATE TABLE Utilizador (
+    id_utilizador INT PRIMARY KEY,
+    nome VARCHAR(70) NOT NULL,
+    e_mail VARCHAR(100) UNIQUE NOT NULL,
+    senha VARCHAR(70) NOT NULL,
+    data_registo TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    número_telemóvel VARCHAR(15) UNIQUE NOT NULL
+);
