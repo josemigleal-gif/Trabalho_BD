@@ -6,3 +6,12 @@ CREATE TABLE Utilizador (
     data_registo TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     número_telemóvel VARCHAR(15) UNIQUE NOT NULL
 );
+
+CREATE TABLE PERFIL (
+    id_utilizor INT PRIMARY KEY,
+    localização VARCHAR(200),
+    idade INT,
+    interesses TEXT,
+    biografia TEXT,
+    seguidores INT DEFAULT 0
+);
