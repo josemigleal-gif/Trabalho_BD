@@ -45,3 +45,16 @@ CREATE TABLE Comentário (
     FOREIGN KEY (id_publicação) REFERENCES Publicação(id_publicação),
     FOREIGN KEY (id_utilizador) REFERENCES Utilizador(id_utilizador)
 );
+
+CREATE TABLE Reação (
+    id_reação INT PRIMARY KEY,
+    id_publicação INT NOT NULL,
+    id_utilizador INT NOT NULL,
+    gosto BOOLEAN NOT NULL,
+    data_reação TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    adoro BOOLEAN NOT NULL,
+    não_gosto BOOLEAN NOT NULL,
+    emoji VARCHAR(10),
+    FOREIGN KEY (id_publicação) REFERENCES Publicação(id_publicação),
+    FOREIGN KEY (id_utilizador) REFERENCES Utilizador(id_utilizador)
+);
