@@ -11,7 +11,25 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
 CREATE TRIGGER trigger_visualizacao_mensagem
 BEFORE UPDATE ON mensagem
 FOR EACH ROW
 EXECUTE FUNCTION atualizar_data_visualizacao();
+
+CREATE OR REPLACE FUNCTION validar_reacao_unica()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF (COALESCE(NEW.gosto::int, 0) +
+        COALESCE(NEW.adoro::int, 0) +
+        COALESCE(NEW.nao_gosto::int, 0)) > 1 THEN
+        RAISE EXCEPTION 'Só uma reação pode ser verdadeira por vez.';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_validar_reacao
+BEFORE INSERT OR UPDATE ON "reação"
+FOR EACH ROW
+EXECUTE FUNCTION validar_reacao_unica();
