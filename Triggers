@@ -33,3 +33,20 @@ CREATE TRIGGER trigger_validar_reacao
 BEFORE INSERT OR UPDATE ON "reação"
 FOR EACH ROW
 EXECUTE FUNCTION validar_reacao_unica();
+
+
+CREATE OR REPLACE FUNCTION incrementar_alcance()
+RETURNS TRIGGER AS $$
+BEGIN
+    UPDATE Publicidade
+    SET alcance = alcance + 1
+    WHERE id_publicidade = NEW.id_publicidade;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_incrementar_alcance
+AFTER INSERT ON "reação"
+FOR EACH ROW
+WHEN (NEW.id_publicação IS NOT NULL)
+EXECUTE FUNCTION incrementar_alcance();
