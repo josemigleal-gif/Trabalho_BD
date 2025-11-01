@@ -25,3 +25,23 @@ CREATE TABLE Grupo (
     data_criação TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_utilizador) REFERENCES Utilizador(id_utilizador)
 );
+
+CREATE TABLE Publicação (
+    id_publicação INT PRIMARY KEY,
+    id_utilizador INT NOT NULL,
+    conteúdo TEXT NOT NULL,
+    media TEXT,
+    privacidade VARCHAR(20) DEFAULT 'público' CHECK (privacidade IN ('público', 'privado')) NOT NULL,
+    data_da_publicação TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_utilizador) REFERENCES Utilizador(id_utilizador)
+); 
+
+CREATE TABLE Comentário (
+    id_comentário INT PRIMARY KEY,
+    id_publicação INT NOT NULL,
+    id_utilizador INT NOT NULL,
+    conteúdo TEXT NOT NULL,
+    data_comentário TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_publicação) REFERENCES Publicação(id_publicação),
+    FOREIGN KEY (id_utilizador) REFERENCES Utilizador(id_utilizador)
+);
