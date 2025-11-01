@@ -15,3 +15,13 @@ CREATE TABLE PERFIL (
     biografia TEXT,
     seguidores INT DEFAULT 0
 );
+
+
+CREATE TABLE Grupo (
+    id_grupo INT PRIMARY KEY,
+    id_utilizador INT NOT NULL,
+    nome VARCHAR(50) NOT NULL,
+    descrição TEXT,
+    data_criação TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_utilizador) REFERENCES Utilizador(id_utilizador)
+);
