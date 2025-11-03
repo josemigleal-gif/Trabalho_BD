@@ -8,7 +8,7 @@ CREATE TABLE Utilizador (
 );
 
 CREATE TABLE PERFIL (
-    id_utilizor INT PRIMARY KEY,
+    id_utilizador INT PRIMARY KEY,
     localização VARCHAR(200),
     idade INT,
     interesses TEXT,
