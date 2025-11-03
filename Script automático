@@ -1,0 +1,18 @@
+DO $$
+DECLARE
+    i INT := 1;
+BEGIN 
+    WHILE i <= 100 LOOP
+        INSERT INTO utilizador (id_utilizador, nome, e_mail, senha, data_registo, número_telemóvel)
+        VALUES (
+            i,
+            'Utilizador_' || i,
+            'utilizador_' || i || '@e_mail.com',
+            'senha' || i,
+            CURRENT_DATE,
+            '91' || LPAD(i::text, 7, '0')
+        );
+        i := i + 1;
+    END LOOP;
+END;
+$$;
