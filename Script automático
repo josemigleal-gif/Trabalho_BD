@@ -59,3 +59,30 @@ BEGIN
     END LOOP;
 END;
 $$;
+
+DO $$
+DECLARE
+    i INT := 1;
+    privacidades TEXT[] := ARRAY['público', 'privado'];
+BEGIN
+    WHILE i <= 150 LOOP
+        INSERT INTO publicação (
+            id_publicação,
+            id_utilizador,
+            conteúdo,
+            media,
+            privacidade,
+            data_da_publicação
+        )
+        VALUES (
+            i,
+            ((i - 1) % 100) + 1,  
+            'Esta é a publicação número ' || i || ' do utilizador ' || ((i - 1) % 100) + 1,
+            CASE WHEN i % 5 = 0 THEN 'imagem_' || i || '.jpg' ELSE NULL END,
+            privacidades[(i % array_length(privacidades, 1)) + 1],
+            CURRENT_TIMESTAMP - (i || ' minutes')::INTERVAL
+        );
+        i := i + 1;
+    END LOOP;
+END;
+$$;
