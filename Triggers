@@ -36,3 +36,21 @@ EXECUTE FUNCTION validar_reacao_unica();
 
 
 
+
+CREATE OR REPLACE FUNCTION validar_conteudo_mensagem()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF NEW.conteúdo IS NULL OR TRIM(NEW.conteúdo) = '' THEN
+        RAISE EXCEPTION 'A mensagem não pode estar vazia';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_validar_mensagem
+BEFORE INSERT OR UPDATE ON bd002_schema.mensagem
+FOR EACH ROW
+EXECUTE FUNCTION validar_conteudo_mensagem();
+
+
+
