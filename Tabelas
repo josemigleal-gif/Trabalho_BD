@@ -65,7 +65,7 @@ CREATE TABLE Mensagem (
     id_destinatário INT NOT NULL,
     data_envio TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     conteúdo TEXT NOT NULL,
-    data_vizualização TIMESTAMP,
+    data_visualização TIMESTAMP,
     FOREIGN KEY (id_remetente) REFERENCES Utilizador(id_utilizador),
     FOREIGN KEY (id_destinatário) REFERENCES Utilizador(id_utilizador)
 );
