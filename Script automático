@@ -214,6 +214,67 @@ BEGIN
 END;
 $$;
 
+-- Inserir mais 50 mensagens
+DO $$
+DECLARE
+    i INT := 101;
+    textos TEXT[] := ARRAY['Olá!', 'Tudo certo?', 'Já viste?', 'Gostei disso.', 'Vamos falar?', 'Partilhaste?', 'Bom dia!', 'Obrigado!', 'Até já!', 'Ajuda-me nisto.'];
+BEGIN
+    WHILE i <= 150 LOOP
+        INSERT INTO Mensagem (
+            id_mensagem,
+            id_remetente,
+            id_destinatário,
+            data_envio,
+            conteúdo,
+            data_visualização
+        )
+        VALUES (
+            i,
+            ((i - 1) % 100) + 1,
+            ((i + 17) % 100) + 1,
+            CURRENT_TIMESTAMP - (i || ' minutes')::INTERVAL,
+            textos[(i % array_length(textos, 1)) + 1],
+            CASE WHEN i % 4 = 0 THEN CURRENT_TIMESTAMP ELSE NULL END
+        );
+        i := i + 1;
+    END LOOP;
+END;
+$$;
+
+DO $$
+DECLARE
+    i INT := 151;
+    textos TEXT[] := ARRAY[
+        'Olá!', 'Tudo certo?', 'Já viste?', 'Gostei disso.', 'Vamos falar?',
+        'Partilhaste?', 'Bom dia!', 'Obrigado!', 'Até já!', 'Ajuda-me nisto.',
+        'Tens novidades?', 'Encontrei algo interessante.', 'Queres conversar?',
+        'Preciso de ajuda.', 'Estás disponível?', 'Vi a tua publicação.', 'Gostei do teu comentário.',
+        'Vamos marcar algo?', 'Fica para depois.', 'Até amanhã!'
+    ];
+BEGIN
+    WHILE i <= 300 LOOP
+        INSERT INTO Mensagem (
+            id_mensagem,
+            id_remetente,
+            id_destinatário,
+            data_envio,
+            conteúdo,
+            data_visualização
+        )
+        VALUES (
+            i,
+            ((i - 1) % 100) + 1,         -- Assume que tens 100 utilizadores
+            ((i + 17) % 100) + 1,        -- Garante que remetente ≠ destinatário
+            CURRENT_TIMESTAMP - (i || ' minutes')::INTERVAL,
+            textos[(i % array_length(textos, 1)) + 1],
+            CASE WHEN i % 4 = 0 THEN CURRENT_TIMESTAMP ELSE NULL END
+        );
+        i := i + 1;
+    END LOOP;
+END;
+$$;
+
 
 DO $$
 DECLARE
