@@ -86,3 +86,35 @@ BEGIN
     END LOOP;
 END;
 $$;
+
+
+DO $$
+DECLARE
+    i INT := 1;
+    emojis TEXT[] := ARRAY['😀', '🔥', '💯', '😢', '👏', '❤️', '😡', '👍', '👎', NULL];
+BEGIN
+    WHILE i <= 150 LOOP
+        INSERT INTO Reação (
+            id_reação,
+            id_publicação,
+            id_utilizador,
+            gosto,
+            data_reação,
+            adoro,
+            não_gosto,
+            emoji
+        )
+        VALUES (
+            i,
+            ((i - 1) % 150) + 1,  -- Assume que tens 150 publicações
+            ((i - 1) % 100) + 1,  -- Assume que tens 100 utilizadores
+            (i % 3 = 1),          -- gosto: TRUE quando i mod 3 = 1
+            CURRENT_TIMESTAMP - (i || ' minutes')::INTERVAL,
+            (i % 3 = 0),          -- adoro: TRUE quando i mod 3 = 0
+            (i % 3 = 2),          -- não_gosto: TRUE quando i mod 3 = 2
+            emojis[(i % array_length(emojis, 1)) + 1]
+        );
+        i := i + 1;
+    END LOOP;
+END;
+$$;
