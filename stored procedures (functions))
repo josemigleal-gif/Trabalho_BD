@@ -1,1 +1,21 @@
+CREATE OR REPLACE FUNCTION estatisticas_utilizador_completas(uid INT)
+RETURNS TABLE (
+    total_publicacoes BIGINT,
+    total_comentarios BIGINT,
+    total_mensagens_enviadas BIGINT,
+    total_mensagens_recebidas BIGINT,
+    total_reacoes BIGINT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+        (SELECT COUNT(*) FROM publicação WHERE id_utilizador = uid),
+        (SELECT COUNT(*) FROM Comentário WHERE id_utilizador = uid),
+        (SELECT COUNT(*) FROM Mensagem WHERE id_remetente = uid),
+        (SELECT COUNT(*) FROM Mensagem WHERE id_destinatário = uid),
+        (SELECT COUNT(*) FROM Reação WHERE id_utilizador = uid);
+END;
+$$ LANGUAGE plpgsql;
+
+
 
