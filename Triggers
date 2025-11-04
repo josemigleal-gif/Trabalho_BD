@@ -35,35 +35,4 @@ FOR EACH ROW
 EXECUTE FUNCTION validar_reacao_unica();
 
 
--- Função que incrementa o alcance da publicidade associada à publicação
--- Função que incrementa o alcance da publicidade associada à publicação
-CREATE OR REPLACE FUNCTION incrementar_alcance()
-RETURNS TRIGGER AS $$
-DECLARE
-    pub_id INT;
-BEGIN
-    -- Obter o id_publicidade associado à publicação
-    SELECT id_publicidade INTO pub_id
-    FROM publicação
-    WHERE id_publicação = NEW.id_publicação;
 
-    -- Atualizar o alcance da publicidade
-    IF pub_id IS NOT NULL THEN
-        UPDATE Publicidade
-        SET alcance = alcance + 1
-        WHERE id_publicidade = pub_id;
-    END IF;
-
-    RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
--- Remover trigger anterior (se já existir)
-DROP TRIGGER IF EXISTS trigger_incrementar_alcance ON "reação";
-
--- Criar trigger que chama a função após inserção na tabela Reação
-CREATE TRIGGER trigger_incrementar_alcance
-AFTER INSERT ON "reação"
-FOR EACH ROW
-WHEN (NEW.id_publicação IS NOT NULL)
-EXECUTE FUNCTION incrementar_alcance();
