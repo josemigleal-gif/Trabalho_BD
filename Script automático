@@ -149,3 +149,34 @@ BEGIN
     END LOOP;
 END;
 $$;
+
+
+
+DO $$
+DECLARE
+    i INT := 1;
+    textos TEXT[] := ARRAY[
+        'Excelente publicação!', 'Concordo plenamente.', 'Muito interessante.',
+        'Não tinha pensado nisso.', 'Obrigado por partilhar!', 'Boa reflexão.',
+        'Discordo, mas respeito.', 'Top!', 'Precisa de mais fontes.', 'Adorei!'
+    ];
+BEGIN
+    WHILE i <= 100 LOOP
+        INSERT INTO Comentário (
+            id_comentário,
+            id_publicação,
+            id_utilizador,
+            conteúdo,
+            data_comentário
+        )
+        VALUES (
+            i,
+            ((i - 1) % 150) + 1,  -- Assume que tens 150 publicações
+            ((i - 1) % 100) + 1,  -- Assume que tens 100 utilizadores
+            textos[(i % array_length(textos, 1)) + 1],
+            CURRENT_TIMESTAMP - (i || ' minutes')::INTERVAL
+        );
+        i := i + 1;
+    END LOOP;
+END;
+$$;
