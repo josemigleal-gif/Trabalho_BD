@@ -241,4 +241,32 @@ END;
 $$;
 
 
-
+DO $$
+DECLARE
+    i INT := 1;
+    titulos TEXT[] := ARRAY[
+        'Promoção Imperdível', 'Novidade da Semana', 'Desconto Especial',
+        'Evento Online', 'Lançamento Exclusivo', 'Oferta Limitada',
+        'Campanha de Verão', 'Black Friday Chegou', 'Últimas Unidades',
+        'Só Hoje!'
+    ];
+BEGIN
+    WHILE i <= 50 LOOP
+        INSERT INTO Publicidade (
+            id_publicidade,
+            id_utilizador,
+            titulo,
+            imagem_url,
+            alcance
+        )
+        VALUES (
+            i,
+            ((i - 1) % 100) + 1,  -- Assume que tens pelo menos 100 utilizadores
+            titulos[(i % array_length(titulos, 1)) + 1],
+            'https://exemplo.com/imagem_' || i || '.jpg',
+            FLOOR(RANDOM() * 91 + 10)::INT  -- Alcance aleatório entre 10 e 100
+        );
+        i := i + 1;
+    END LOOP;
+END;
+$$;
