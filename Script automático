@@ -180,3 +180,36 @@ BEGIN
     END LOOP;
 END;
 $$;
+
+
+DO $$
+DECLARE
+    i INT := 1;
+    textos TEXT[] := ARRAY[
+        'Olá, tudo bem?', 'Já viste a nova publicação?', 'Gostei do teu comentário!',
+        'Vamos conversar mais tarde?', 'Tenho uma dúvida sobre o grupo.',
+        'Partilhaste algo interessante!', 'Queres juntar-te ao evento?',
+        'Bom dia!', 'Obrigado pela ajuda!', 'Até logo!'
+    ];
+BEGIN
+    WHILE i <= 100 LOOP
+        INSERT INTO Mensagem (
+            id_mensagem,
+            id_remetente,
+            id_destinatário,
+            data_envio,
+            conteúdo,
+            data_visualização
+        )
+        VALUES (
+            i,
+            ((i - 1) % 100) + 1,                      -- Assume que tens 100 utilizadores
+            ((i + 17) % 100) + 1,                     -- Garante que remetente ≠ destinatário
+            CURRENT_TIMESTAMP - (i || ' minutes')::INTERVAL,
+            textos[(i % array_length(textos, 1)) + 1],
+            CASE WHEN i % 4 = 0 THEN CURRENT_TIMESTAMP - (i || ' minutes')::INTERVAL ELSE NULL END
+        );
+        i := i + 1;
+    END LOOP;
+END;
+$$;
