@@ -118,3 +118,34 @@ BEGIN
     END LOOP;
 END;
 $$;
+
+
+
+DO $$
+DECLARE
+    i INT := 1;
+    nomes TEXT[] := ARRAY[
+        'Exploradores Digitais', 'Cultura Pop', 'Gamers Unidos', 'Fotografia Urbana',
+        'Café Filosófico', 'Cinema & Séries', 'Música Alternativa', 'Programadores PT',
+        'Leitores Vorazes', 'Viajantes do Mundo'
+    ];
+BEGIN
+    WHILE i <= 50 LOOP
+        INSERT INTO Grupo (
+            id_grupo,
+            id_utilizador,
+            nome,
+            descrição,
+            data_criação
+        )
+        VALUES (
+            i,
+            ((i - 1) % 50) + 1,  -- Assume que tens pelo menos 50 utilizadores
+            nomes[(i % array_length(nomes, 1)) + 1],
+            'Grupo dedicado a ' || nomes[(i % array_length(nomes, 1)) + 1],
+            CURRENT_DATE - (i || ' days')::INTERVAL
+        );
+        i := i + 1;
+    END LOOP;
+END;
+$$;
