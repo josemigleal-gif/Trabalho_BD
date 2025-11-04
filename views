@@ -1,0 +1,7 @@
+CREATE VIEW mensagens_nao_lidas AS
+SELECT * FROM Mensagem
+WHERE data_visualização IS NULL;
+
+CREATE VIEW relações_pendentes AS
+SELECT * FROM Relação 
+Where estado = 'pendente';
