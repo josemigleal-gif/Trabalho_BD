@@ -213,3 +213,29 @@ BEGIN
     END LOOP;
 END;
 $$;
+
+
+DO $$
+DECLARE
+    i INT := 1;
+    estados TEXT[] := ARRAY['pendente', 'aceite', 'recusado'];
+BEGIN
+    WHILE i <= 100 LOOP
+        INSERT INTO Relação (
+            id_relação,
+            id_utilizador_origem,
+            id_utilizador_destino,
+            data_início,
+            estado
+        )
+        VALUES (
+            i,
+            ((i - 1) % 100) + 1,             -- Assume que tens 100 utilizadores
+            ((i + 23) % 100) + 1,            -- Garante que origem ≠ destino
+            CURRENT_DATE - (i || ' days')::INTERVAL,
+            estados[(i % array_length(estados, 1)) + 1]
+        );
+        i := i + 1;
+    END LOOP;
+END;
+$$;
