@@ -59,7 +59,7 @@ JOIN Perfil pf ON p.id_utilizador = pf.id_utilizador
 GROUP BY p.id_utilizador, pf.seguidores
 HAVING COUNT(p.id_publicação) > 5;
 
--- 11. Quais são os utilizadores que têm publicações sem comentários?
+-- 10. Quais são os utilizadores que têm publicações sem comentários?
 SELECT u.nome
 FROM utilizador u
 JOIN Publicação p ON u.id_utilizador = p.id_utilizador
