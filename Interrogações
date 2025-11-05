@@ -116,3 +116,13 @@ JOIN Utilizador u ON p.id_utilizador = u.id_utilizador
 GROUP BY p.id_utilizador, u.nome
 HAVING SUM(CASE WHEN p.privacidade = 'privado' THEN 1 ELSE 0 END) >
        SUM(CASE WHEN p.privacidade = 'publico' THEN 1 ELSE 0 END);
+
+SELECT u.id_utilizador, u.nome
+FROM Utilizador u
+WHERE u.id_utilizador IN (
+    SELECT p.id_utilizador
+    FROM Publicação p
+    WHERE p.id_publicação NOT IN (
+        SELECT r.id_publicação FROM Reação r
+    )
+);
