@@ -67,4 +67,9 @@ WHERE p.id_publicação NOT IN (
   SELECT id_publicação FROM Comentário
 );
 
-
+-- 11. Qual é o conteúdo da última mensagem recebida pelo utilizador com ID 5?
+SELECT conteúdo
+FROM Mensagem
+WHERE id_destinatário = 5
+ORDER BY data_envio DESC
+LIMIT 1;
