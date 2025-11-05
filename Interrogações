@@ -86,3 +86,14 @@ FROM Mensagem m -- Indica que os dados vêm da tabela "Mensagem"
 GROUP BY m.id_remetente, m.id_destinatário -- Agrupa os resultados por cada par remetente/destinatário para calcular o total de mensagens entre eles 
 ORDER BY total_mensagens DESC -- Ordena os pares pela quantidade de mensagens trocadas, do maior para menor
 LIMIT 5; -- Mostra apenas os 5 pares com mais mensagens trocadas
+
+-- 14 Remover campanhas de publicidade com alcance inferior a 10
+-- Inserir campanhas com baixo alcance
+INSERT INTO Publicidade (id_publicidade, id_utilizador, titulo, imagem_url, alcance) -- Cria novas campanhas na tabela "Publicação"
+VALUES 
+    (51, 30, 'Campanha Fraca', 'img51.jpg', 8), --Primeira campanha com alcance 8
+    (52, 31, 'Campanha Sem Alcance', 'img52.jpg', 9); -- Segunda campanha com alcance 9
+
+-- Eliminar campanhas com alcance muito baixo
+DELETE FROM Publicidade -- Indica que vamos eliminar dados da tabela "Publicidade"
+WHERE alcance < 10; -- Condição para eliminar campanhas com alcance menor que 10
