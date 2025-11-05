@@ -97,3 +97,15 @@ VALUES
 -- Eliminar campanhas com alcance muito baixo
 DELETE FROM Publicidade 
 WHERE alcance < 10; 
+
+
+SELECT DISTINCT m.id_remetente, u.nome
+FROM Mensagem m
+JOIN Utilizador u ON m.id_remetente = u.id_utilizador
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM Relação r
+    WHERE r.estado = 'aceite'
+      AND r.id_utilizador_origem = m.id_remetente
+      AND r.id_utilizador_destino = m.id_destinatário
+);
