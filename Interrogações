@@ -109,3 +109,10 @@ WHERE NOT EXISTS (
       AND r.id_utilizador_origem = m.id_remetente
       AND r.id_utilizador_destino = m.id_destinatário
 );
+
+SELECT p.id_utilizador, u.nome
+FROM Publicação p
+JOIN Utilizador u ON p.id_utilizador = u.id_utilizador
+GROUP BY p.id_utilizador, u.nome
+HAVING SUM(CASE WHEN p.privacidade = 'privado' THEN 1 ELSE 0 END) >
+       SUM(CASE WHEN p.privacidade = 'publico' THEN 1 ELSE 0 END);
