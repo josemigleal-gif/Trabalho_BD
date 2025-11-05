@@ -1,1 +1,61 @@
+-- 1. Atualizar a biografia do perfil do utilizador com ID 7
+UPDATE Perfil
+SET biografia = 'Apaixonado por música e viagens.'
+WHERE id_utilizador = 7;
+
+-- 2. Atualizar o número de seguidores do utilizador com ID 6 para 99
+UPDATE Perfil
+SET seguidores = 99
+WHERE id_utilizador = 6;
+
+-- 3. Atualizar a biografia do perfil do utilizador com ID 7
+UPDATE Perfil
+SET biografia = 'Apaixonado por música e viagens.'
+WHERE id_utilizador = 7;
+
+-- 4. Quais são os utilizadores que comentaram publicações de utilizadores que seguem?
+SELECT DISTINCT c.id_utilizador
+FROM Comentário c
+JOIN Publicação p ON c.id_publicação = p.id_publicação
+JOIN Relação r ON c.id_utilizador = r.id_utilizador_origem
+WHERE r.id_utilizador_destino = p.id_utilizador AND r.estado = 'aceite';
+
+-- 5. Qual é o nome do utilizador com mais comentários feitos?
+SELECT u.nome
+FROM Utilizador u
+WHERE u.id_utilizador = (
+  SELECT id_utilizador
+  FROM Comentário
+  GROUP BY id_utilizador
+  ORDER BY COUNT(*) DESC
+  LIMIT 1
+);
+
+-- 6. Qual é o número total de reações por tipo (gosto, não_gosto, adoro)?
+SELECT 
+  SUM(CASE WHEN gosto THEN 1 ELSE 0 END) AS total_gostos,
+  SUM(CASE WHEN não_gosto THEN 1 ELSE 0 END) AS total_não_gostos,
+  SUM(CASE WHEN adoro THEN 1 ELSE 0 END) AS total_adoro
+FROM reação;
+
+-- 7. Qual é a média de comentários por publicação?
+SELECT AVG(comentários_por_publicação) AS media_comentários
+FROM (
+  SELECT COUNT(*) AS comentários_por_publicação
+  FROM Comentário
+  GROUP BY id_publicação
+) AS sub;
+
+-- 8. Quais são os utilizadores que enviaram mensagens não visualizadas?
+SELECT DISTINCT u.nome
+FROM Utilizador u
+JOIN Mensagem m ON u.id_utilizador = m.id_remetente
+WHERE m.data_visualização IS NULL;
+
+-- 9. Qual é o número de seguidores dos utilizadores que têm mais de 5 publicações?
+SELECT p.id_utilizador, pf.seguidores
+FROM Publicação p
+JOIN Perfil pf ON p.id_utilizador = pf.id_utilizador
+GROUP BY p.id_utilizador, pf.seguidores
+HAVING COUNT(p.id_publicação) > 5;
 
