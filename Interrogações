@@ -73,3 +73,9 @@ FROM Mensagem
 WHERE id_destinatário = 5
 ORDER BY data_envio DESC
 LIMIT 1;
+
+-- 12. Quais são os utilizadores que têm relações aceites com o utilizador com ID 4?
+SELECT u.nome
+FROM Utilizador u
+JOIN Relação r ON u.id_utilizador = r.id_utilizador_destino
+WHERE r.id_utilizador_origem = 4 AND r.estado = 'aceite';
