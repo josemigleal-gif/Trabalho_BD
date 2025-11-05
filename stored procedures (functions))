@@ -37,3 +37,26 @@ $$ LANGUAGE plpgsql;
 
 SELECT * FROM atividade_diaria_utilizador(2, DATE '2025-11-03');
 
+
+
+
+CREATE OR REPLACE FUNCTION publicidade_com_maior_alcance()
+RETURNS TABLE (
+    id_publicidade INT,
+    titulo VARCHAR(50),
+    alcance INT,
+    id_utilizador INT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT p.id_publicidade, p.titulo, p.alcance, p.id_utilizador
+    FROM Publicidade p
+    ORDER BY p.alcance DESC
+    LIMIT 1;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+SELECT * FROM publicidade_com_maior_alcance();
+
