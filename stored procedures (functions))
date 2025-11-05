@@ -17,5 +17,23 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION atividade_diaria_utilizador(uid INT, data_ref DATE)
+RETURNS TABLE (
+    publicacoes BIGINT,
+    comentarios BIGINT,
+    mensagens BIGINT,
+    reacoes BIGINT
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT
+        (SELECT COUNT(*) FROM Publicação WHERE id_utilizador = uid AND DATE(data_da_publicação) = data_ref),
+        (SELECT COUNT(*) FROM Comentário WHERE id_utilizador = uid AND DATE(data_comentário) = data_ref),
+        (SELECT COUNT(*) FROM Mensagem WHERE id_remetente = uid AND DATE(data_envio) = data_ref),
+        (SELECT COUNT(*) FROM Reação WHERE id_utilizador = uid AND DATE(data_reação) = data_ref);
+END;
+$$ LANGUAGE plpgsql;
 
+
+SELECT * FROM atividade_diaria_utilizador(2, DATE '2025-11-03');
 
