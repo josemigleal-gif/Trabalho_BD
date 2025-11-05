@@ -60,3 +60,25 @@ $$ LANGUAGE plpgsql;
 
 SELECT * FROM publicidade_com_maior_alcance();
 
+
+CREATE OR REPLACE FUNCTION listar_relacoes_utilizador(uid INT)
+RETURNS TABLE (
+    id_relação INT,
+    origem INT,
+    destino INT,
+    data_início TIMESTAMP,
+    estado VARCHAR(100)
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT r.id_relação, r.id_utilizador_origem, r.id_utilizador_destino, r.data_início, r.estado
+    FROM Relação r
+    WHERE r.id_utilizador_origem = uid OR r.id_utilizador_destino = uid;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+
+SELECT * FROM listar_relacoes_utilizador(3);
+
