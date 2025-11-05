@@ -126,3 +126,13 @@ WHERE u.id_utilizador IN (
         SELECT r.id_publicação FROM Reação r
     )
 );
+
+SELECT u.id_utilizador, u.nome
+FROM Utilizador u
+WHERE (
+    SELECT COUNT(*) FROM Publicação p WHERE p.id_utilizador = u.id_utilizador
+) > (
+    SELECT AVG(pub_count) FROM (
+        SELECT COUNT(*) AS pub_count FROM Publicação GROUP BY id_utilizador
+    ) AS sub
+);
