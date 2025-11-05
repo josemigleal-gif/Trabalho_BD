@@ -79,3 +79,10 @@ SELECT u.nome
 FROM Utilizador u
 JOIN Relação r ON u.id_utilizador = r.id_utilizador_destino
 WHERE r.id_utilizador_origem = 4 AND r.estado = 'aceite';
+
+-- 13 Ver mensagens trocadas entre os 5 pares de utilizadores mais ativos
+SELECT m.id_remetente, m.id_destinatário, COUNT(*) AS total_mensagens -- Seleciona os pares de utilizadores e conta as mensagens entre eles
+FROM Mensagem m -- Indica que os dados vêm da tabela "Mensagem"
+GROUP BY m.id_remetente, m.id_destinatário -- Agrupa os resultados por cada par remetente/destinatário para calcular o total de mensagens entre eles 
+ORDER BY total_mensagens DESC -- Ordena os pares pela quantidade de mensagens trocadas, do maior para menor
+LIMIT 5; -- Mostra apenas os 5 pares com mais mensagens trocadas
