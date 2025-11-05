@@ -82,3 +82,24 @@ $$ LANGUAGE plpgsql;
 
 SELECT * FROM listar_relacoes_utilizador(3);
 
+
+CREATE OR REPLACE FUNCTION ler_comentarios(pid INT)
+RETURNS TABLE (
+    id_comentário INT,
+    id_utilizador INT,
+    conteúdo TEXT,
+    data_comentário TIMESTAMP
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT c.id_comentário, c.id_utilizador, c.conteúdo, c.data_comentário
+    FROM Comentário c
+    WHERE c.id_publicação = pid
+    ORDER BY c.data_comentário DESC;
+END;
+$$ LANGUAGE plpgsql;
+
+
+
+SELECT * FROM ler_comentarios(5);
+
