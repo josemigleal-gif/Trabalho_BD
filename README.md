@@ -12,9 +12,9 @@ PostGreSQL instalado (versão 13 ou superior)
 5. Executar queries.sql (interrogações de teste)
  
   Estrutura de Ficheiros
-Descrição do que contém cada script SQL
-Organização do projeto
-5. Notas de Implementação
-Decisões importantes tomadas
-Funcionalidades principais do sistema
-Como testar as interrogações
+  Descrição do que contém cada script SQL
+  Organização do projeto
+  Notas de Implementação
+  Decisões importantes tomadas
+  Funcionalidades principais do sistema
+  Como testar as interrogações
