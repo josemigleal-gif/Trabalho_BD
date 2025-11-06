@@ -1,20 +1,33 @@
 # Trabalho_BD
-Este trabalho consite na implementação de uma base de daods relacional de uma rede social através da plataforma PostGreSQL
-São necessários os seguintes programas para a excução da rede de dados:
+Sitema: Rede social com: publicações,comentários, mensagens, grupos, reações e publicidade 
+
+São necessários os seguintes requisitos para a excução da rede de dados:
 Um terminal ou ambiente de progamação para escrever comandos de SQL
 PostGreSQL instalado (versão 13 ou superior)
 
-  Ordem de passos de instalação: 
-1. Criar a base de dados
-2. Executar schema.sql (criação das tabelas)
-3. Executar data.sql (população de dados)
-4. Executar procedures.sql (stored procedures/functions)
-5. Executar queries.sql (interrogações de teste)
+  Estrutura de Ficheiros de exucução:
+  BD2526_E1_Grupo0X.zip
+├── README.md
+├── Tabelas.sql        (Criação de tabelas e restrições)
+├── Triggers.sql       (Triggers de regras de negócio)
+├── Script.sql         (População da base de dados)
+├── Functions.sql      (Stored procedures e functions)
+├── Views.sql          (Views para relatórios)
+└── Interrogações.sql  (Interrogações de teste)
  
-  Estrutura de Ficheiros
-  Descrição do que contém cada script SQL
-  Organização do projeto
-  Notas de Implementação
-  Decisões importantes tomadas
-  Funcionalidades principais do sistema
-  Como testar as interrogações
+Passos de instalação
+1. Criar a base de dados
+CREATE DATABASE rede_social_bd;
+\c rede_social_bd
+2. Executar as Tabelas.sql
+psql -U postgres -d rede_social_bd -f schema.sql
+3. Executar Triggers.sql
+psql -U postgres -d rede_social_bd -f triggers.sql
+4. Executar data.sql
+psql -U postgres -d rede_social_bd -f data.sql
+5. Executar Functions.sql
+psql -U postgres -d rede_social_bd -f procedures.sql
+6. Executar views.sql
+psql -U postgres -d rede_social_bd -f views.sql
+7. Executar Interrogações.sql
+psql -U postgres -d rede_social_bd -f queries.sql
