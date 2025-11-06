@@ -1,5 +1,5 @@
 # Trabalho_BD
-Sitema: Rede social com: publicações, comentários, mensagens, grupos, reações e publicidade 
+Sitema: Rede social com: Utilizadores, perfis, publicações, relações, comentários, mensagens, grupos, reações e publicidade 
 
 São necessários os seguintes requisitos para a excução da rede de dados:
 
