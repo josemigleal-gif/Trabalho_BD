@@ -6,13 +6,21 @@ Um terminal ou ambiente de progamação para escrever comandos de SQL
 PostGreSQL instalado (versão 13 ou superior)
 
   Estrutura de Ficheiros de exucução:
-  BD2526_E1_Grupo0X.zip
+  
+  BD2526_E1_Grupo02.zip
+  
 ├── README.md
+
 ├── Tabelas.sql        (Criação de tabelas e restrições)
+
 ├── Triggers.sql       (Triggers de validação e automação)
+
 ├── Script.sql         (População da base de dados)
+
 ├── Functions.sql      (Stored procedures e functions)
+
 ├── Views.sql          (Views para relatórios)
+
 └── Interrogações.sql  (Interrogações de teste)
  
 Passos de instalação
