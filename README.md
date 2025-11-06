@@ -9,7 +9,7 @@ PostGreSQL instalado (versão 13 ou superior)
   BD2526_E1_Grupo0X.zip
 ├── README.md
 ├── Tabelas.sql        (Criação de tabelas e restrições)
-├── Triggers.sql       (Triggers de regras de negócio)
+├── Triggers.sql       (Triggers de validação e automação)
 ├── Script.sql         (População da base de dados)
 ├── Functions.sql      (Stored procedures e functions)
 ├── Views.sql          (Views para relatórios)
