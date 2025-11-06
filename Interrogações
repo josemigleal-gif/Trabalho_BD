@@ -1,104 +1,70 @@
--- 1. Atualizar a biografia do perfil do utilizador com ID 7
-UPDATE Perfil
-SET biografia = 'Apaixonado por música e viagens.'
-WHERE id_utilizador = 7;
-
--- 2. Atualizar o número de seguidores do utilizador com ID 6 para 99
-UPDATE Perfil
-SET seguidores = 99
-WHERE id_utilizador = 6;
-
--- 3. Atualizar a biografia do perfil do utilizador com ID 7
-UPDATE Perfil
-SET biografia = 'Apaixonado por música e viagens.'
-WHERE id_utilizador = 7;
-
--- 4. Quais são os utilizadores que comentaram publicações de utilizadores que seguem?
-SELECT DISTINCT c.id_utilizador
-FROM Comentário c
-JOIN Publicação p ON c.id_publicação = p.id_publicação
-JOIN Relação r ON c.id_utilizador = r.id_utilizador_origem
-WHERE r.id_utilizador_destino = p.id_utilizador AND r.estado = 'aceite';
-
--- 5. Qual é o nome do utilizador com mais comentários feitos?
-SELECT u.nome
-FROM Utilizador u
-WHERE u.id_utilizador = (
-  SELECT id_utilizador
-  FROM Comentário
-  GROUP BY id_utilizador
-  ORDER BY COUNT(*) DESC
-  LIMIT 1
-);
-
--- 6. Qual é o número total de reações por tipo (gosto, não_gosto, adoro)?
+--1  Qual é o número total de reações por tipo (gosto, não_gosto, adoro)?
 SELECT 
-  SUM(CASE WHEN gosto THEN 1 ELSE 0 END) AS total_gostos,
-  SUM(CASE WHEN não_gosto THEN 1 ELSE 0 END) AS total_não_gostos,
-  SUM(CASE WHEN adoro THEN 1 ELSE 0 END) AS total_adoro
-FROM reação;
+  SUM(CASE WHEN gosto THEN 1 ELSE 0 END) AS total_gostos,  
+  SUM(CASE WHEN não_gosto THEN 1 ELSE 0 END) AS total_não_gostos, 
+  SUM(CASE WHEN adoro THEN 1 ELSE 0 END) AS total_adoro 
+FROM reação; 
 
--- 7. Qual é a média de comentários por publicação?
-SELECT AVG(comentários_por_publicação) AS media_comentários
-FROM (
-  SELECT COUNT(*) AS comentários_por_publicação
-  FROM Comentário
-  GROUP BY id_publicação
-) AS sub;
-
--- 8. Quais são os utilizadores que enviaram mensagens não visualizadas?
-SELECT DISTINCT u.nome
-FROM Utilizador u
-JOIN Mensagem m ON u.id_utilizador = m.id_remetente
-WHERE m.data_visualização IS NULL;
-
--- 9. Qual é o número de seguidores dos utilizadores que têm mais de 5 publicações?
-SELECT p.id_utilizador, pf.seguidores
-FROM Publicação p
-JOIN Perfil pf ON p.id_utilizador = pf.id_utilizador
-GROUP BY p.id_utilizador, pf.seguidores
-HAVING COUNT(p.id_publicação) > 5;
-
--- 10. Quais são os utilizadores que têm publicações sem comentários?
-SELECT u.nome
-FROM utilizador u
-JOIN Publicação p ON u.id_utilizador = p.id_utilizador
-WHERE p.id_publicação NOT IN (
-  SELECT id_publicação FROM Comentário
+--2 Quais são os nomes dos utilizadores com mais comentários feitos?
+SELECT u.nome, stats.total_comentarios  
+FROM Utilizador u 
+JOIN (  
+    SELECT c.id_utilizador, COUNT(*) AS total_comentarios  
+    FROM Comentário c    
+    GROUP BY c.id_utilizador 
+) stats ON u.id_utilizador = stats.id_utilizador 
+WHERE stats.total_comentarios = (
+    SELECT MAX(conta)
+    FROM (
+        SELECT COUNT(*) AS conta
+        FROM Comentário
+        GROUP BY id_utilizador
+    ) sub
 );
 
--- 11. Qual é o conteúdo da última mensagem recebida pelo utilizador com ID 5?
-SELECT conteúdo
-FROM Mensagem
-WHERE id_destinatário = 5
-ORDER BY data_envio DESC
-LIMIT 1;
-
--- 12. Quais são os utilizadores que têm relações aceites com o utilizador com ID 4?
-SELECT u.nome
-FROM Utilizador u
-JOIN Relação r ON u.id_utilizador = r.id_utilizador_destino
-WHERE r.id_utilizador_origem = 4 AND r.estado = 'aceite';
-
--- 13 Ver mensagens trocadas entre os 5 pares de utilizadores mais ativos
-SELECT m.id_remetente, m.id_destinatário, COUNT(*) AS total_mensagens 
-FROM Mensagem m 
-GROUP BY m.id_remetente, m.id_destinatário
-ORDER BY total_mensagens DESC 
-LIMIT 5; 
-
--- 14 Remover campanhas de publicidade com alcance inferior a 10
--- Inserir campanhas com baixo alcance
+--3 Remova campanhas de publicidade com alcance inferior a 10
 INSERT INTO Publicidade (id_publicidade, id_utilizador, titulo, imagem_url, alcance) 
 VALUES 
     (51, 30, 'Campanha Fraca', 'img51.jpg', 8), 
     (52, 31, 'Campanha Sem Alcance', 'img52.jpg', 9); 
-
--- Eliminar campanhas com alcance muito baixo
 DELETE FROM Publicidade 
 WHERE alcance < 10; 
 
+--4 Quais são os 5 pares de utilizadores que trocaram mais mensagens entre si? e quantas mensagens foram trocadas?
+SELECT m.id_remetente, m.id_destinatário, COUNT(*) AS total_mensagens 
+FROM Mensagem m 
+GROUP BY m.id_remetente, m.id_destinatário
+ORDER BY total_mensagens DESC 
+LIMIT 5;
 
+--5 Quais são os utilizadores que criaram publicidades com alcance superior à média geral?
+SELECT u.nome, SUM(pu.alcance) AS alcance_total
+FROM Utilizador u
+JOIN Publicidade pu ON u.id_utilizador = pu.id_utilizador
+GROUP BY u.nome
+HAVING SUM(pu.alcance) > (
+    SELECT AVG(alcance_total)
+    FROM (
+        SELECT SUM(alcance) AS alcance_total
+        FROM Publicidade
+        GROUP BY id_utilizador
+    ) sub
+);
+
+--6 Quais são as publicações que receberam reações com emoji?
+SELECT DISTINCT p.id_publicação, p.conteúdo
+FROM Publicação p
+JOIN Reação r ON p.id_publicação = r.id_publicação
+WHERE r.emoji IS NOT NULL;
+
+--7 Quais são os emojis mais usados nas reações?
+SELECT emoji, COUNT(*) AS total
+FROM Reação
+WHERE emoji IS NOT NULL
+GROUP BY emoji
+ORDER BY total DESC;
+
+--8 Quais são os utilizadores que enviaram mensagens para utilizadores com quem não têm relação?
 SELECT DISTINCT m.id_remetente, u.nome
 FROM Mensagem m
 JOIN Utilizador u ON m.id_remetente = u.id_utilizador
@@ -110,6 +76,7 @@ WHERE NOT EXISTS (
       AND r.id_utilizador_destino = m.id_destinatário
 );
 
+--9 Quais são os utilizadores que têm mais publicações privadas do que públicas?
 SELECT p.id_utilizador, u.nome
 FROM Publicação p
 JOIN Utilizador u ON p.id_utilizador = u.id_utilizador
@@ -117,22 +84,98 @@ GROUP BY p.id_utilizador, u.nome
 HAVING SUM(CASE WHEN p.privacidade = 'privado' THEN 1 ELSE 0 END) >
        SUM(CASE WHEN p.privacidade = 'publico' THEN 1 ELSE 0 END);
 
-SELECT u.id_utilizador, u.nome
-FROM Utilizador u
-WHERE u.id_utilizador IN (
-    SELECT p.id_utilizador
-    FROM Publicação p
-    WHERE p.id_publicação NOT IN (
-        SELECT r.id_publicação FROM Reação r
-    )
-);
+--10 Quais são os utilizadores que nunca receberam uma reação nas suas publicações?
+SELECT p.id_utilizador, u.nome
+FROM Publicação p
+JOIN Utilizador u ON p.id_utilizador = u.id_utilizador
+GROUP BY p.id_utilizador, u.nome
+HAVING SUM(CASE WHEN p.privacidade = 'privado' THEN 1 ELSE 0 END) >
+       SUM(CASE WHEN p.privacidade = 'publico' THEN 1 ELSE 0 END);
+
+--11 Quais são os utilizadores que têm mais publicações do que a média da plataforma?
 
 SELECT u.id_utilizador, u.nome
 FROM Utilizador u
 WHERE (
-    SELECT COUNT(*) FROM Publicação p WHERE p.id_utilizador = u.id_utilizador
+    SELECT COUNT(*)
+    FROM Publicação pub
+    WHERE pub.id_utilizador = u.id_utilizador
 ) > (
-    SELECT AVG(pub_count) FROM (
-        SELECT COUNT(*) AS pub_count FROM Publicação GROUP BY id_utilizador
-    ) AS sub
+    SELECT AVG(total_publicacoes)
+    FROM (
+        SELECT COUNT(*) AS total_publicacoes
+        FROM Publicação
+        GROUP BY id_utilizador
+    ) AS estatisticas
 );
+
+--12 Quais são as publicações que receberam comentários de utilizadores que também reagiram com "não_gosto"?
+SELECT p.id_publicação
+FROM Publicação p
+WHERE EXISTS (
+    SELECT 1
+    FROM Comentário c
+    JOIN Reação r ON c.id_utilizador = r.id_utilizador
+    WHERE c.id_publicação = p.id_publicação
+      AND r.id_publicação = p.id_publicação
+      AND r."não_gosto" = TRUE
+);
+
+--13 Qual é a proporção de publicações que nunca receberam comentários nem reações?
+SELECT ROUND(COUNT(*) * 100.0 / (
+    SELECT COUNT(*) FROM Publicação
+), 2) AS percentagem_sem_interacao
+FROM Publicação p
+WHERE p.id_publicação NOT IN (
+    SELECT id_publicação FROM Comentário
+)
+AND p.id_publicação NOT IN (
+    SELECT id_publicação FROM Reação
+);
+
+--14 Qual é o tempo médio entre envio e visualização de mensagens que foram efetivamente vistas?
+SELECT ROUND(AVG(EXTRACT(MINUTE FROM AGE(data_visualização, data_envio))), 2) AS tempo_medio_minutos
+FROM Mensagem
+WHERE data_visualização IS NOT NULL;
+
+--15 Como é que se atualiza a biografia do perfil do utilizador com ID 7?
+UPDATE Perfil
+SET biografia = 'Apaixonado por música e viagens.'
+WHERE id_utilizador = 7;
+
+--16 Qual a média de comentários por publicação?
+SELECT AVG(comentários_por_publicação) AS media_comentários
+FROM (
+  SELECT COUNT(*) AS comentários_por_publicação
+  FROM Comentário
+  GROUP BY id_publicação
+) AS sub;
+
+--17 Quais são os utilizadores que enviaram mensagens não visualizadas?
+SELECT DISTINCT u.nome
+FROM Utilizador u
+JOIN Mensagem m ON u.id_utilizador = m.id_remetente
+WHERE m.data_visualização IS NULL;
+
+--18 Quais são os utilizadores com número de relações pendentes e quantas mensagens enviaram para esses mesmos utilizadores?
+SELECT u.nome,
+       COUNT(DISTINCT r.id_utilizador_destino) AS relacoes_pendentes,
+       COUNT(DISTINCT m.id_mensagem) AS mensagens_para_pendentes
+FROM Utilizador u
+LEFT JOIN Relação r ON u.id_utilizador = r.id_utilizador_origem AND r.estado = 'pendente'
+LEFT JOIN Mensagem m ON m.id_remetente = u.id_utilizador AND m.id_destinatário = r.id_utilizador_destino
+GROUP BY u.nome;
+
+--19 Cria uma lista de publicações com o respetivo autor e o número total de comentários recebidos.
+SELECT p.id_publicação, u.nome AS autor,
+       COUNT(c.id_comentário) AS total_comentarios
+FROM publicação p
+JOIN utilizador u ON p.id_utilizador = u.id_utilizador
+LEFT JOIN comentário c ON p.id_publicação = c.id_publicação
+GROUP BY p.id_publicação, u.nome;
+
+--20 Lista de todos os utilizadores e o número total de mensagens que enviaram.
+SELECT u.nome, COUNT(m.id_mensagem) AS total_mensagens_enviadas
+FROM Utilizador u
+LEFT JOIN Mensagem m ON u.id_utilizador = m.id_remetente
+GROUP BY u.nome;
