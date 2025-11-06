@@ -2,7 +2,9 @@
 Sitema: Rede social com: publicações,comentários, mensagens, grupos, reações e publicidade 
 
 São necessários os seguintes requisitos para a excução da rede de dados:
+
 Um terminal ou ambiente de progamação para escrever comandos de SQL
+
 PostGreSQL instalado (versão 13 ou superior)
 
   Estrutura de Ficheiros de exucução:
