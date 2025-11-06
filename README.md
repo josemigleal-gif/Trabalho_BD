@@ -34,24 +34,24 @@ CREATE DATABASE rede_social_bd;
 
 2. Executar as Tabelas.sql
 
-psql -U postgres -d rede_social_bd -f schema.sql
+psql -U postgres -d rede_social_bd -f Tabelas.sql
 
 3. Executar Triggers.sql
 
-psql -U postgres -d rede_social_bd -f triggers.sql
+psql -U postgres -d rede_social_bd -f Triggers.sql
 
 4. Executar data.sql
 
-psql -U postgres -d rede_social_bd -f data.sql
+psql -U postgres -d rede_social_bd -f Script.sql
 
 5. Executar Functions.sql
    
-psql -U postgres -d rede_social_bd -f procedures.sql
+psql -U postgres -d rede_social_bd -f Functions.sql
 
 6. Executar views.sql
    
-psql -U postgres -d rede_social_bd -f views.sql
+psql -U postgres -d rede_social_bd -f Views.sql
 
 7. Executar Interrogações.sql
     
-psql -U postgres -d rede_social_bd -f queries.sql
+psql -U postgres -d rede_social_bd -f Interrogações.sql
