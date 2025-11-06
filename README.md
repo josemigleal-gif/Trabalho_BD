@@ -35,21 +35,23 @@ CREATE DATABASE rede_social_bd;
 2. Executar as Tabelas.sql
 
 psql -U postgres -d rede_social_bd -f schema.sql
-4. Executar Triggers.sql
+
+3. Executar Triggers.sql
 
 psql -U postgres -d rede_social_bd -f triggers.sql
-5. Executar data.sql
+
+4. Executar data.sql
 
 psql -U postgres -d rede_social_bd -f data.sql
 
-6. Executar Functions.sql
+5. Executar Functions.sql
    
 psql -U postgres -d rede_social_bd -f procedures.sql
 
-8. Executar views.sql
+6. Executar views.sql
    
 psql -U postgres -d rede_social_bd -f views.sql
 
-10. Executar Interrogações.sql
+7. Executar Interrogações.sql
     
 psql -U postgres -d rede_social_bd -f queries.sql
