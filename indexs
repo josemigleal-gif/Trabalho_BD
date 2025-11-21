@@ -6,3 +6,6 @@ ON Reação (gosto, não_gosto, adoro);
 CREATE INDEX idx_comentario_utilizador_count 
 ON Comentário(id_utilizador);
 
+--4
+CREATE INDEX idx_mensagem_remetente_destinatario 
+ON Mensagem(id_remetente, id_destinatário);
