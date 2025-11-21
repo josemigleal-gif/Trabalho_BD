@@ -2,3 +2,7 @@
 CREATE INDEX idx_reacao_contagens 
 ON Reação (gosto, não_gosto, adoro);
 
+--2
+CREATE INDEX idx_comentario_utilizador_count 
+ON Comentário(id_utilizador);
+
