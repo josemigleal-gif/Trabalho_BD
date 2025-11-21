@@ -1,1 +1,4 @@
+--1
+CREATE INDEX idx_reacao_contagens 
+ON Reação (gosto, não_gosto, adoro);
 
