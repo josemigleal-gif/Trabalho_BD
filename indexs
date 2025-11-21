@@ -9,3 +9,7 @@ ON Comentário(id_utilizador);
 --4
 CREATE INDEX idx_mensagem_remetente_destinatario 
 ON Mensagem(id_remetente, id_destinatário);
+
+--5
+CREATE INDEX idx_publicidade_utilizador_alcance 
+ON Publicidade(id_utilizador, alcance);
