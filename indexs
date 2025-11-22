@@ -13,3 +13,7 @@ ON Mensagem(id_remetente, id_destinatário);
 --5
 CREATE INDEX idx_publicidade_utilizador_alcance 
 ON Publicidade(id_utilizador, alcance);
+
+--8
+CREATE INDEX idx_relacao_origem_destino_estado 
+ON Relação(id_utilizador_origem, id_utilizador_destino, estado);
