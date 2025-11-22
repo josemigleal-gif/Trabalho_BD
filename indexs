@@ -21,3 +21,7 @@ ON Relação(id_utilizador_origem, id_utilizador_destino, estado);
 --9 
 CREATE INDEX idx_publicacao_utilizador_privacidade 
 ON Publicação(id_utilizador, privacidade);
+
+--11
+CREATE INDEX idx_publicacao_utilizador 
+ON Publicação (id_utilizador);
