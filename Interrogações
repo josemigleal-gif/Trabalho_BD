@@ -85,12 +85,20 @@ HAVING SUM(CASE WHEN p.privacidade = 'privado' THEN 1 ELSE 0 END) >
        SUM(CASE WHEN p.privacidade = 'publico' THEN 1 ELSE 0 END);
 
 --10 Quais são os utilizadores que nunca receberam uma reação nas suas publicações?
-SELECT p.id_utilizador, u.nome
-FROM Publicação p
-JOIN Utilizador u ON p.id_utilizador = u.id_utilizador
-GROUP BY p.id_utilizador, u.nome
-HAVING SUM(CASE WHEN p.privacidade = 'privado' THEN 1 ELSE 0 END) >
-       SUM(CASE WHEN p.privacidade = 'publico' THEN 1 ELSE 0 END);
+SELECT u.id_utilizador, u.nome
+FROM Utilizador u
+WHERE EXISTS (
+    SELECT 1
+    FROM Publicação p
+    WHERE p.id_utilizador = u.id_utilizador
+)
+AND NOT EXISTS (
+    SELECT 1
+    FROM Publicação p
+    JOIN Reação r ON p.id_publicação = r.id_publicação
+    WHERE p.id_utilizador = u.id_utilizador
+);
+
 
 --11 Quais são os utilizadores que têm mais publicações do que a média da plataforma?
 
