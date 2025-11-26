@@ -23,3 +23,14 @@ FROM Utilizador u
 JOIN ranked r
   ON u.id_utilizador = r.id_utilizador
 WHERE r.total_comentarios = r.max_total;
+
+
+-- 20 
+SELECT u.id_utilizador, u.nome,
+       COALESCE(m.total_mensagens, 0) AS total_mensagens_enviadas
+FROM Utilizador u
+LEFT JOIN (
+    SELECT id_remetente, COUNT(*) AS total_mensagens
+    FROM Mensagem
+    GROUP BY id_remetente
+) m ON u.id_utilizador = m.id_remetente;
