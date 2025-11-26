@@ -32,6 +32,8 @@ ON Publicação(id_utilizador, privacidade);
 CREATE INDEX idx_publicacao_utilizador 
 ON Publicação (id_utilizador);
 
+CREATE INDEX idx_utilizador_nome ON Utilizador (id_utilizador, nome);
+
 --13
 CREATE INDEX idx_comentario_publicacao ON Comentário (id_publicação);
 CREATE INDEX idx_reacao_publicacao ON Reação (id_publicação);
