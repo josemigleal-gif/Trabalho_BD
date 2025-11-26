@@ -25,7 +25,7 @@ JOIN ranked r
 WHERE r.total_comentarios = r.max_total;
 
 
--- 20 
+-- 20 Lista de todos os utilizadores e o número total de mensagens que enviaram.
 SELECT u.id_utilizador, u.nome,
        COALESCE(m.total_mensagens, 0) AS total_mensagens_enviadas
 FROM Utilizador u
