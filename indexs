@@ -17,6 +17,9 @@ ON Publicidade(id_utilizador, alcance);
 --6
 CREATE INDEX idx_reacao_pub_hash ON Reação USING HASH (id_publicação);
 
+--7
+CREATE INDEX idx_reacao_emoji ON Reação (emoji);
+
 --8
 CREATE INDEX idx_relacao_origem_destino_estado 
 ON Relação(id_utilizador_origem, id_utilizador_destino, estado);
