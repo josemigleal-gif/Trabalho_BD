@@ -29,8 +29,7 @@ CREATE INDEX idx_publicacao_utilizador_privacidade
 ON Publicação(id_utilizador, privacidade);
 
 --11
-CREATE INDEX idx_publicacao_utilizador 
-ON Publicação (id_utilizador);
+CREATE INDEX idx_publicacao_utilizador ON Publicação (id_utilizador);
 
 CREATE INDEX idx_utilizador_nome ON Utilizador (id_utilizador, nome);
 
