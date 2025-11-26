@@ -24,6 +24,15 @@ JOIN ranked r
   ON u.id_utilizador = r.id_utilizador
 WHERE r.total_comentarios = r.max_total;
 
+--17 
+SELECT nome 
+FROM Utilizador 
+WHERE id_utilizador IN (
+    SELECT DISTINCT id_remetente 
+    FROM Mensagem 
+    WHERE data_visualização IS NULL
+);
+
 --18 
 WITH relacoes_pendentes AS (
     SELECT id_utilizador_origem, id_utilizador_destino
