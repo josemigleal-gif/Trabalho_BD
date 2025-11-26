@@ -37,5 +37,8 @@ CREATE INDEX idx_utilizador_nome ON Utilizador (id_utilizador, nome);
 CREATE INDEX idx_comentario_publicacao ON Comentário (id_publicação);
 CREATE INDEX idx_reacao_publicacao ON Reação (id_publicação);
 
+--14
+CREATE INDEX idx_mensagem_datas ON Mensagem (data_visualização, data_envio);
+
 --20
 CREATE INDEX idx_mensagem_remetente ON Mensagem (id_remetente);
