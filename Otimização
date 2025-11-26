@@ -24,6 +24,33 @@ JOIN ranked r
   ON u.id_utilizador = r.id_utilizador
 WHERE r.total_comentarios = r.max_total;
 
+--18 
+WITH relacoes_pendentes AS (
+    SELECT id_utilizador_origem, id_utilizador_destino
+    FROM Relação
+    WHERE estado = 'pendente'
+),
+mensagens_para_pendentes AS (
+    SELECT m.id_remetente, COUNT(*) AS total_mensagens
+    FROM Mensagem m
+    JOIN relacoes_pendentes r
+      ON m.id_remetente = r.id_utilizador_origem
+     AND m.id_destinatário = r.id_utilizador_destino
+    GROUP BY m.id_remetente
+),
+contagem_relacoes AS (
+    SELECT id_utilizador_origem, COUNT(*) AS total_relacoes
+    FROM relacoes_pendentes
+    GROUP BY id_utilizador_origem
+)
+SELECT u.id_utilizador, u.nome,
+       COALESCE(cr.total_relacoes, 0) AS relacoes_pendentes,
+       COALESCE(mp.total_mensagens, 0) AS mensagens_para_pendentes
+FROM Utilizador u
+LEFT JOIN contagem_relacoes cr ON u.id_utilizador = cr.id_utilizador_origem
+LEFT JOIN mensagens_para_pendentes mp ON u.id_utilizador = mp.id_remetente;
+
+
 
 -- 20 Lista de todos os utilizadores e o número total de mensagens que enviaram.
 SELECT u.id_utilizador, u.nome,
