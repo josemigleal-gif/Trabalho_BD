@@ -1,1 +1,25 @@
+---1
+SELECT
+    SUM(gosto::int)       AS total_gostos,
+    SUM("não_gosto"::int) AS total_não_gostos,
+    SUM(adoro::int)       AS total_adoro
+FROM reação;
 
+-2
+WITH stats AS (
+  SELECT c.id_utilizador, COUNT(*) AS total_comentarios
+  FROM Comentário c
+  GROUP BY c.id_utilizador
+),
+ranked AS (
+  SELECT
+    id_utilizador,
+    total_comentarios,
+    MAX(total_comentarios) OVER () AS max_total
+  FROM stats
+)
+SELECT u.nome, r.total_comentarios
+FROM Utilizador u
+JOIN ranked r
+  ON u.id_utilizador = r.id_utilizador
+WHERE r.total_comentarios = r.max_total;
