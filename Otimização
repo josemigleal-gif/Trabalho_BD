@@ -54,6 +54,17 @@ WHERE EXISTS (
     AND r.emoji IS NOT NULL
 );
 
+--12
+SELECT DISTINCT c.id_publicação
+FROM Comentário c
+WHERE EXISTS (
+    SELECT 1 
+    FROM Reação r 
+    WHERE r.id_utilizador = c.id_utilizador 
+    AND r.id_publicação = c.id_publicação
+    AND r."não_gosto" = TRUE
+);
+
 --15
 já está otimizada
 
