@@ -54,6 +54,18 @@ WHERE EXISTS (
     AND r.emoji IS NOT NULL
 );
 
+--7
+SELECT m.id_remetente, u.nome
+FROM Mensagem m
+JOIN Utilizador u ON m.id_remetente = u.id_utilizador
+LEFT JOIN Relação r 
+    ON r.id_utilizador_origem = m.id_remetente
+    AND r.id_utilizador_destino = m.id_destinatário
+    AND r.estado = 'aceite'
+WHERE r.id_utilizador_origem IS NULL
+GROUP BY m.id_remetente, u.nome;
+
+
 --11
 SELECT u.id_utilizador, u.nome
 FROM Utilizador u
