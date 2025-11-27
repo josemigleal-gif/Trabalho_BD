@@ -72,6 +72,31 @@ LEFT JOIN Relação r
 WHERE r.id_utilizador_origem IS NULL
 GROUP BY m.id_remetente, u.nome;
 
+
+---8
+SELECT m.id_remetente, u.nome
+FROM Mensagem m
+JOIN Utilizador u ON m.id_remetente = u.id_utilizador
+LEFT JOIN Relação r 
+    ON r.id_utilizador_origem = m.id_remetente
+    AND r.id_utilizador_destino = m.id_destinatário
+    AND r.estado = 'aceite'
+WHERE r.id_utilizador_origem IS NULL
+GROUP BY m.id_remetente, u.nome;
+
+SELECT DISTINCT m.id_remetente, u.nome
+FROM Mensagem m
+JOIN Utilizador u ON m.id_remetente = u.id_utilizador
+WHERE NOT EXISTS (
+    SELECT 1
+    FROM Relação r
+    WHERE r.estado = 'aceite'
+      AND r.id_utilizador_origem = m.id_remetente
+      AND r.id_utilizador_destino = m.id_destinatário
+);
+
+
+
 --9 
 WITH contagens AS (
     SELECT 
