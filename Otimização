@@ -28,6 +28,22 @@ WHERE r.total_comentarios = r.max_total;
 --4
 Já está otimizada
 
+--5
+SELECT u.nome, stats.alcance_total
+FROM (
+    SELECT id_utilizador, alcance_total
+    FROM (
+        SELECT 
+            id_utilizador,
+            SUM(alcance) AS alcance_total,
+            AVG(SUM(alcance)) OVER () AS media_global
+        FROM publicidade
+        GROUP BY id_utilizador
+    ) AS calculos
+    WHERE alcance_total > media_global
+) AS stats
+JOIN Utilizador u ON u.id_utilizador = stats.id_utilizador;
+
 --15
 já está otimizada
 
