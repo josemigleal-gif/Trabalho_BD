@@ -5,6 +5,7 @@ SELECT
     SUM(adoro::int)       AS total_adoro
 FROM reação;
 
+
 -2
 WITH stats AS (
   SELECT c.id_utilizador, COUNT(*) AS total_comentarios
@@ -25,8 +26,11 @@ JOIN ranked r
 WHERE r.total_comentarios = r.max_total;
 
 
+
 --4
 Já está otimizada
+
+
 
 --5
 SELECT u.nome, stats.alcance_total
@@ -44,6 +48,8 @@ FROM (
 ) AS stats
 JOIN Utilizador u ON u.id_utilizador = stats.id_utilizador;
 
+
+
 --6
 SELECT p.id_publicação, p.conteúdo
 FROM Publicação p
@@ -53,6 +59,7 @@ WHERE EXISTS (
     WHERE r.id_publicação = p.id_publicação
     AND r.emoji IS NOT NULL
 );
+
 
 --7
 SELECT m.id_remetente, u.nome
@@ -64,6 +71,7 @@ LEFT JOIN Relação r
     AND r.estado = 'aceite'
 WHERE r.id_utilizador_origem IS NULL
 GROUP BY m.id_remetente, u.nome;
+
 
 
 --11
@@ -78,6 +86,8 @@ WHERE (
     FROM Publicação
 );
 
+
+
 --12
 SELECT DISTINCT c.id_publicação
 FROM Comentário c
@@ -89,12 +99,18 @@ WHERE EXISTS (
     AND r."não_gosto" = TRUE
 );
 
+
+
 --15
 já está otimizada
+
+
 
 --16 
 SELECT COUNT(*) * 1.0 / COUNT(DISTINCT id_publicação) AS media_comentários
 FROM Comentário;
+
+
 
 --17 
 SELECT nome 
@@ -104,6 +120,9 @@ WHERE id_utilizador IN (
     FROM Mensagem 
     WHERE data_visualização IS NULL
 );
+
+
+
 
 --18 
 WITH relacoes_pendentes AS (
@@ -130,6 +149,21 @@ SELECT u.id_utilizador, u.nome,
 FROM Utilizador u
 LEFT JOIN contagem_relacoes cr ON u.id_utilizador = cr.id_utilizador_origem
 LEFT JOIN mensagens_para_pendentes mp ON u.id_utilizador = mp.id_remetente;
+
+
+
+
+--19
+SELECT p.id_publicação, u.nome AS autor, 
+       COALESCE(contagem.total_comentarios, 0) AS total_comentarios
+FROM Publicação p
+JOIN Utilizador u ON p.id_utilizador = u.id_utilizador
+LEFT JOIN (
+    SELECT id_publicação, COUNT(id_comentário) AS total_comentarios
+    FROM Comentário
+    GROUP BY id_publicação
+) AS contagem ON p.id_publicação = contagem.id_publicação;
+
 
 
 
