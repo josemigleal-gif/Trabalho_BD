@@ -72,7 +72,13 @@ LEFT JOIN Relação r
 WHERE r.id_utilizador_origem IS NULL
 GROUP BY m.id_remetente, u.nome;
 
-
+--10 
+SELECT u.id_utilizador, u.nome
+FROM Utilizador u
+LEFT JOIN Publicação p ON u.id_utilizador = p.id_utilizador
+LEFT JOIN Reação r ON p.id_publicação = r.id_publicação
+WHERE r.id_publicação IS NULL
+AND p.id_utilizador IS NOT NULL;
 
 --11
 SELECT u.id_utilizador, u.nome
