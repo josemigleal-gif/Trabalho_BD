@@ -44,6 +44,16 @@ FROM (
 ) AS stats
 JOIN Utilizador u ON u.id_utilizador = stats.id_utilizador;
 
+--6
+SELECT p.id_publicação, p.conteúdo
+FROM Publicação p
+WHERE EXISTS (
+    SELECT 1
+    FROM Reação r
+    WHERE r.id_publicação = p.id_publicação
+    AND r.emoji IS NOT NULL
+);
+
 --15
 já está otimizada
 
