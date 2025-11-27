@@ -72,6 +72,20 @@ LEFT JOIN Relação r
 WHERE r.id_utilizador_origem IS NULL
 GROUP BY m.id_remetente, u.nome;
 
+--9 
+WITH contagens AS (
+    SELECT 
+        id_utilizador,
+        COUNT(*) FILTER (WHERE privacidade = 'privado') as privadas,
+        COUNT(*) FILTER (WHERE privacidade = 'publico') as publicas
+    FROM Publicação
+    GROUP BY id_utilizador
+)
+SELECT c.id_utilizador, u.nome
+FROM contagens c
+JOIN Utilizador u ON c.id_utilizador = u.id_utilizador
+WHERE c.privadas > c.publicas;
+
 --10 
 SELECT u.id_utilizador, u.nome
 FROM Utilizador u
