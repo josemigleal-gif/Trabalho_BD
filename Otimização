@@ -24,6 +24,13 @@ JOIN ranked r
   ON u.id_utilizador = r.id_utilizador
 WHERE r.total_comentarios = r.max_total;
 
+
+--4
+Já está otimizada
+
+--15
+já está otimizada
+
 --16 
 SELECT COUNT(*) * 1.0 / COUNT(DISTINCT id_publicação) AS media_comentários
 FROM Comentário;
