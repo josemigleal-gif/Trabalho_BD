@@ -54,6 +54,18 @@ WHERE EXISTS (
     AND r.emoji IS NOT NULL
 );
 
+--11
+SELECT u.id_utilizador, u.nome
+FROM Utilizador u
+WHERE (
+    SELECT COUNT(*) 
+    FROM Publicação 
+    WHERE id_utilizador = u.id_utilizador
+) > (
+    SELECT (COUNT(*) / GREATEST(COUNT(DISTINCT id_utilizador), 1))
+    FROM Publicação
+);
+
 --12
 SELECT DISTINCT c.id_publicação
 FROM Comentário c
