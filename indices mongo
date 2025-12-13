@@ -1,0 +1,9 @@
+db.posts.createIndex(
+    { "autor.id_utilizador": 1, "data_publicacao": -1 },
+    { name: "idx_feed" }
+);
+
+db.posts.createIndex(
+    { "id_sql_publicacao": 1 },
+    { unique: true, name: "id_sql_publicacao_1" }
+);
